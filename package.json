@@ -2,8 +2,10 @@
   "name": "react-modeling",
   "version": "1.0.0",
   "description": "Collection of modeling utils",
-  "main": "src/index.js",
+  "main": "dist/react-modeling.cjs.js",
   "scripts": {
+    "bundle": "rollup -i src/index -c rollup.config.js -o dist/react-modeling.cjs.js",
+    "dev": "rollup -w -i src/index -c rollup.config.js -o dist/react-modeling.cjs.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +25,19 @@
   "bugs": {
     "url": "https://github.com/strobox/react-modeling/issues"
   },
-  "homepage": "https://github.com/strobox/react-modeling#readme"
+  "homepage": "https://github.com/strobox/react-modeling#readme",
+  "dependencies": {
+    "mermaid": "^8.0.0",
+    "nomnoml": "github:strobox/nomnoml"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-react-jsx-source": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
+  }
 }
