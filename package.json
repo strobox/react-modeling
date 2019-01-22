@@ -1,0 +1,27 @@
+{
+  "name": "react-modeling",
+  "version": "1.0.0",
+  "description": "Collection of modeling utils",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strobox/react-modeling.git"
+  },
+  "keywords": [
+    "react",
+    "nomnoml",
+    "mermaid",
+    "modeling",
+    "uml",
+    "diagrams"
+  ],
+  "author": "strobox",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/strobox/react-modeling/issues"
+  },
+  "homepage": "https://github.com/strobox/react-modeling#readme"
+}
