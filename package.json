@@ -1,6 +1,6 @@
 {
   "name": "react-modeling",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Collection of modeling utils",
   "main": "dist/react-modeling.cjs.js",
   "scripts": {

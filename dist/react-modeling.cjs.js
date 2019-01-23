@@ -5,42 +5,119 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var React = require('react');
-var React__default = _interopDefault(React);
 var mermaid = require('mermaid');
 var lodash = _interopDefault(require('lodash'));
 var dagre$1 = _interopDefault(require('dagre'));
 
-function drawOnCanvas(canvas, text) {
-  if (canvas) try {
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+function factory(tag, drawwer) {
+  return function (props) {
+    var domRef = React.useRef();
+
+    var defaultContent = props.defaultContent,
+        children = props.children,
+        rest = _objectWithoutProperties(props, ["defaultContent", "children"]);
+
+    function draw(content) {
+      drawwer(content, domRef.current, props);
+    }
+
+    React.useEffect(function () {
+      if (!children && defaultContent) draw(defaultContent);
+    }, []);
+    React.useEffect(function () {
+      if (children) draw(children);
+    }, [children]);
+    return React.createElement(tag, _objectSpread({
+      ref: domRef
+    }, rest));
+  };
+}
+
+var Mermaid = factory("div", function (content, node, _ref) {
+  var onError = _ref.onError;
+  if (node) try {
     var id = 'mermaid_draw';
 
     var insertSvg = function insertSvg(svgCode, bindFunctions) {
-      canvas.innerHTML = svgCode;
+      node.innerHTML = svgCode;
     };
 
-    var graph = mermaid.mermaidAPI.render(id, text, insertSvg, canvas);
+    var graph = mermaid.mermaidAPI.render(id, content, insertSvg, node);
   } catch (e) {
     console.error(e);
+    onError && onError(e, content);
   }
-}
-
-function Mermaid(props) {
-  var canvRef = React.useRef();
-
-  function draw(text) {
-    drawOnCanvas(canvRef.current, text);
-  }
-
-  React.useEffect(function () {
-    if (!props.children && props.defaultContent) draw(props.defaultContent, false);
-  }, []);
-  React.useEffect(function () {
-    if (props.children) draw(props.children);
-  }, [props.children]);
-  return React__default.createElement("div", {
-    ref: canvRef
-  });
-}
+});
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -1801,31 +1878,15 @@ nomnoml.Compartment = function (lines, nodes, relations){
 });
 });
 
-function drawOnCanvas$1(canvas, text) {
-  if (canvas) try {
-    nomnoml.draw(canvas, text);
+var Nomnoml = factory("canvas", function (content, node, _ref) {
+  var onError = _ref.onError;
+  if (node) try {
+    nomnoml.draw(node, content);
   } catch (e) {
     console.error(e);
+    onError && onError(e, content);
   }
-}
-
-function NomnomlCanvas(props) {
-  var canvRef = React.useRef();
-
-  function draw(text) {
-    drawOnCanvas$1(canvRef.current, text);
-  }
-
-  React.useEffect(function () {
-    if (!props.children && props.defaultContent) draw(props.defaultContent, false);
-  }, []);
-  React.useEffect(function () {
-    if (props.children) draw(props.children);
-  }, [props.children]);
-  return React.createElement("canvas", {
-    ref: canvRef
-  });
-}
+});
 
 exports.Mermaid = Mermaid;
-exports.Nomnoml = NomnomlCanvas;
+exports.Nomnoml = Nomnoml;

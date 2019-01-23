@@ -1,37 +1,19 @@
-import React from 'react';
-import {useEffect, useRef} from 'react';
-import {mermaidAPI} from 'mermaid'
+import factory from './reactFactory';
 
-function drawOnCanvas(canvas, text) {
-  if (canvas)
-    try {
-      const id = 'mermaid_draw';
-      var insertSvg = (svgCode, bindFunctions) => {
-          canvas.innerHTML = svgCode;
-      };
+import {mermaidAPI} from 'mermaid';
 
-      var graph = mermaidAPI.render(id, text, insertSvg, canvas);
-    } catch (e) {
-      console.error(e);
-    }
-}
+export default factory("div", (content,node,{onError}) => {
+    if (node)
+      try {
+        const id = 'mermaid_draw';
+        var insertSvg = (svgCode, bindFunctions) => {
+            node.innerHTML = svgCode;
+        };
 
-export default function Mermaid(props) {
-  const canvRef = useRef();
+        var graph = mermaidAPI.render(id, content, insertSvg, node);
+      } catch (e) {
+        console.error(e);
+        onError && onError(e,content);
+      }
+})
 
-  function draw(text) {
-    drawOnCanvas(canvRef.current, text);
-  }
-  useEffect(() => {
-    if(!props.children && props.defaultContent)
-      draw(props.defaultContent, false);
-  },[])
-  useEffect(() => {
-    if(props.children)
-      draw(props.children);
-  },[props.children]);
-
-
-  return <div ref={canvRef}></div>
-
-}
